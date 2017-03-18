@@ -2,7 +2,7 @@
 // 
 // 
 
-#include "SN74HC595N.h"
+#include "../include/SN74HC595N.h"
 
 ShiftRegister::ShiftRegister(int SER, int RCLK, int SRCLK, int SRCLR, int OE)
 {

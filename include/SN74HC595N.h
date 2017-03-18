@@ -38,7 +38,7 @@ public:
 	// Serial 2 Parallel
 	//	int input: 8-bit character to be set on the eight output ports QA to QG
 	void S2P(int input);
-}
+};
 
 #endif
 

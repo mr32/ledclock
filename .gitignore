@@ -254,3 +254,8 @@ paket-files/
 # Visual Micro 
 .vs
 __vm
+
+# Ignore VS files as well
+*.sln
+*.vcxproj.*
+*.vcxproj
