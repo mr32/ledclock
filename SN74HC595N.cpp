@@ -40,7 +40,7 @@ void ShiftRegister::S2P(byte input)
 
 	for (byte i = 0; i < 8; i++)
 	{
-		digitalWrite(p_SER, bitRead(input, 7 - i));
+		digitalWrite(p_SER, bitRead(input, i));
 		digitalWrite(p_SRCLK, HIGH);
 		digitalWrite(p_SRCLK, LOW);
 	}
