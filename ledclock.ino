@@ -1,11 +1,12 @@
 #include "SN74HC595N.h"
 
-ShiftRegister* test = new ShiftRegister(2, 3, 4, 5);
+ShiftRegister* segmentSelector = new ShiftRegister(2, 3, 4, 5);
+ShiftRegister* displaySelector = new ShiftRegister(6, 7, 8, 9);
 
 void setup()
 {
 	 /* add setup code here */
-	test->S2P(toSevenSegment(11));
+	segmentSelector->S2P(toSevenSegment(11));
 }
 
 void loop()
@@ -13,7 +14,7 @@ void loop()
 
 	for (byte i = 0; i < 10; i++)
 	{
-		test->S2P(toSevenSegment(i));
+		segmentSelector->S2P(toSevenSegment(i));
 		delay(500);
 	}
 	//test->S2P(toSevenSegment(0));

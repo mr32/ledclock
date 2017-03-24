@@ -12,11 +12,11 @@
 class ShiftRegister
 {
 private:
-	byte p_SER;
-	byte p_RCLK;
-	byte p_SRCLK;
-	byte p_SRCLR;
-	byte p_OE;
+	byte SER_;
+	byte RCLK_;
+	byte SRCLK_;
+	byte SRCLR_;
+	byte OE_;
 
 public:
 	// Constructor
