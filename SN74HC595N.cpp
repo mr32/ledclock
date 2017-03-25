@@ -44,3 +44,21 @@ void ShiftRegister::S2P(byte input)
 	digitalWrite(p_.RCLK, HIGH);
 	digitalWrite(p_.RCLK, LOW);
 }
+
+void ShiftRegister::shift()
+{
+	// Make sure first input is zero
+	digitalWrite(p_.SER, LOW);
+	// Make sure the output is not reset
+	digitalWrite(p_.SRCLR, HIGH);
+	// Shift existing content with one place
+	digitalWrite(p_.SRCLK, HIGH);
+	digitalWrite(p_.SRCLK, LOW);
+}
+
+void ShiftRegister::reset()
+{
+	// Reset data on shift register
+	digitalWrite(p_.SRCLR, LOW);
+	digitalWrite(p_.SRCLR, HIGH);
+}

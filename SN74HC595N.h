@@ -33,6 +33,12 @@ public:
 	// Serial 2 Parallel
 	//	int input: 8-bit character to be set on the eight output ports QA to QH
 	void S2P(byte input);
+
+	// Shift the data one place
+	void shift();
+
+	// Reset data on the shift register
+	void reset();
 };
 
 #endif
