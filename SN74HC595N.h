@@ -9,18 +9,23 @@
 	#include "WProgram.h"
 #endif
 
+struct ShiftRegisterPins
+{
+	byte SER;
+	byte RCLK;
+	byte SRCLK;
+	byte SRCLR;
+	byte OE;
+};
+
 class ShiftRegister
 {
 private:
-	byte SER_;
-	byte RCLK_;
-	byte SRCLK_;
-	byte SRCLR_;
-	byte OE_;
+	ShiftRegisterPins p_;
 
 public:
 	// Constructor
-	ShiftRegister(byte SER, byte RCLK, byte SRCLK, byte SRCLR, byte OE = -1);
+	ShiftRegister(ShiftRegisterPins pins);
 
 	// Destructor (sets pins to 0)
 	~ShiftRegister();

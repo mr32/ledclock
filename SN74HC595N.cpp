@@ -1,50 +1,46 @@
 #include "SN74HC595N.h"
 
-ShiftRegister::ShiftRegister(byte SER, byte RCLK, byte SRCLK, byte SRCLR, byte OE)
+ShiftRegister::ShiftRegister(ShiftRegisterPins pins)
 {
 	// Set pin values
-	SER_ = SER;
-	RCLK_ = RCLK;
-	SRCLK_ = SRCLK;
-	SRCLR_ = SRCLR;
-	OE_ = OE;
+	p_ = pins;
 
 	// Set pin modes
-	pinMode(SER_, OUTPUT);
-	pinMode(RCLK_, OUTPUT);
-	pinMode(SRCLK_, OUTPUT);
-	pinMode(SRCLR_, OUTPUT);
-	if (OE_ != -1) { pinMode(OE_, OUTPUT); }
+	pinMode(p_.SER, OUTPUT);
+	pinMode(p_.RCLK, OUTPUT);
+	pinMode(p_.SRCLK, OUTPUT);
+	pinMode(p_.SRCLR, OUTPUT);
+	if (p_.OE != -1) { pinMode(p_.OE, OUTPUT); }
 
 	// Set default values
-	if (OE_ != -1) { digitalWrite(OE_, LOW); }		// Enable output
-	digitalWrite(SRCLR_, LOW);							// Reset register
-	digitalWrite(SER_, LOW);
-	digitalWrite(RCLK_, LOW);
-	digitalWrite(SRCLK_, LOW);
+	if (p_.OE != -1) { digitalWrite(p_.OE, LOW); }		// Enable output
+	digitalWrite(p_.SRCLR, LOW);							// Reset register
+	digitalWrite(p_.SER, LOW);
+	digitalWrite(p_.RCLK, LOW);
+	digitalWrite(p_.SRCLK, LOW);
 }
 
 ShiftRegister::~ShiftRegister()
 {
 	// Reset output
-	digitalWrite(SER_, LOW);
-	digitalWrite(RCLK_, LOW);
-	digitalWrite(SRCLK_, LOW);
-	digitalWrite(SRCLR_, LOW);
-	digitalWrite(OE_, HIGH);							// Disable output
+	digitalWrite(p_.SER, LOW);
+	digitalWrite(p_.RCLK, LOW);
+	digitalWrite(p_.SRCLK, LOW);
+	digitalWrite(p_.SRCLR, LOW);
+	digitalWrite(p_.OE, HIGH);							// Disable output
 }
 
 void ShiftRegister::S2P(byte input)
 {
-	digitalWrite(SRCLR_, HIGH);
+	digitalWrite(p_.SRCLR, HIGH);
 
 	for (byte i = 0; i < 8; i++)
 	{
-		digitalWrite(SER_, bitRead(input, i));
-		digitalWrite(SRCLK_, HIGH);
-		digitalWrite(SRCLK_, LOW);
+		digitalWrite(p_.SER, bitRead(input, i));
+		digitalWrite(p_.SRCLK, HIGH);
+		digitalWrite(p_.SRCLK, LOW);
 	}
 
-	digitalWrite(RCLK_, HIGH);
-	digitalWrite(RCLK_, LOW);
+	digitalWrite(p_.RCLK, HIGH);
+	digitalWrite(p_.RCLK, LOW);
 }
