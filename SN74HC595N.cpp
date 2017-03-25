@@ -13,7 +13,7 @@ ShiftRegister::ShiftRegister(ShiftRegisterPins pins)
 	if (p_.OE != -1) { pinMode(p_.OE, OUTPUT); }
 
 	// Set default values
-	if (p_.OE != -1) { digitalWrite(p_.OE, LOW); }		// Enable output
+	if (p_.OE != -1) { digitalWrite(p_.OE, LOW); }			// Enable output
 	digitalWrite(p_.SRCLR, LOW);							// Reset register
 	digitalWrite(p_.SER, LOW);
 	digitalWrite(p_.RCLK, LOW);
@@ -42,6 +42,7 @@ void ShiftRegister::S2P(byte input)
 	}
 
 	digitalWrite(p_.RCLK, HIGH);
+	digitalWrite(p_.OE, LOW);
 	digitalWrite(p_.RCLK, LOW);
 }
 
@@ -53,7 +54,11 @@ void ShiftRegister::shift()
 	digitalWrite(p_.SRCLR, HIGH);
 	// Shift existing content with one place
 	digitalWrite(p_.SRCLK, HIGH);
+	// Enable the output, if it wasn't already
+	digitalWrite(p_.OE, LOW);
+	// Lower the clock
 	digitalWrite(p_.SRCLK, LOW);
+
 }
 
 void ShiftRegister::reset()
@@ -61,4 +66,14 @@ void ShiftRegister::reset()
 	// Reset data on shift register
 	digitalWrite(p_.SRCLR, LOW);
 	digitalWrite(p_.SRCLR, HIGH);
+}
+
+void ShiftRegister::disable()
+{
+	digitalWrite(p_.OE, HIGH);
+}
+
+void ShiftRegister::enable()
+{
+	digitalWrite(p_.OE, LOW);
 }

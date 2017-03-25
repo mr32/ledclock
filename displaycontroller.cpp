@@ -21,19 +21,31 @@ DisplayController::~DisplayController()
 
 void DisplayController::next()
 {
-	// Cycle to the next display
-	if (cycleCounter_ == NUM_DISPLAYS - 1)
-	{
+	cycleCounter_ += 1;
+
+	if (cycleCounter_ >= 5)
 		cycleCounter_ = 0;
+	else if (cycleCounter_ >= brightness_)
+	{
+		display_->disable();
+		return;
+	}
+	
+	// Cycle to the next display
+	if (displayCounter_ == NUM_DISPLAYS - 1)
+	{
+		displayCounter_ = 0;
 		display_->S2P(B00000001);
 	}
 	else
 	{
-		cycleCounter_ += 1;
+		displayCounter_ += 1;
 		display_->shift();
 	}
 	// Send data to shift register
-	segment_->S2P(content_[cycleCounter_]);
+	segment_->S2P(content_[displayCounter_]);
+	display_->enable();
+
 }
 
 void DisplayController::setContent(byte id, byte content)
@@ -44,6 +56,11 @@ void DisplayController::setContent(byte id, byte content)
 
 	// Directly convert input to binary segments and store
 	content_[id] = toSevenSegment_(content);
+}
+
+void DisplayController::setBrightness(byte brightness)
+{
+	brightness_ = brightness;
 }
 
 byte DisplayController::toSevenSegment_(byte input)

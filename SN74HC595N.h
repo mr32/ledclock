@@ -39,6 +39,12 @@ public:
 
 	// Reset data on the shift register
 	void reset();
+
+	// Disable output
+	void disable();
+
+	// Enable output
+	void enable();
 };
 
 #endif

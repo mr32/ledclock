@@ -17,8 +17,9 @@ class DisplayController
 private:
 	// Private variables
 	byte content_[NUM_DISPLAYS] = { B00000000 };
+	byte displayCounter_ = 0;
 	byte cycleCounter_ = 0;
-	byte dutycycle_;
+	byte brightness_;
 
 	ShiftRegisterPins segmentPins_;
 	ShiftRegisterPins displayPins_;
@@ -39,7 +40,7 @@ public:
 	void setContent(byte id, byte content);
 
 	// Set the display's brightness
-	void setDutyCycle(byte dc);
+	void setBrightness(byte brightness);
 
 	// Get the display's brightness
 	byte getDutyCycle();
