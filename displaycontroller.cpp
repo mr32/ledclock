@@ -19,6 +19,33 @@ DisplayController::~DisplayController()
 	delete display_;
 }
 
+void DisplayController::next()
+{
+	// Cycle to the next display
+	if (cycleCounter_ == NUM_DISPLAYS - 1)
+	{
+		cycleCounter_ = 0;
+		display_->S2P(B00000001);
+	}
+	else
+	{
+		cycleCounter_ += 1;
+		display_->shift();
+	}
+	// Send data to shift register
+	segment_->S2P(content_[cycleCounter_]);
+}
+
+void DisplayController::setContent(byte id, byte content)
+{
+	// Ignore if ID is larger than the number of displays
+	if (id > NUM_DISPLAYS)
+		return;
+
+	// Directly convert input to binary segments and store
+	content_[id] = toSevenSegment_(content);
+}
+
 byte DisplayController::toSevenSegment_(byte input)
 {
 	byte r;

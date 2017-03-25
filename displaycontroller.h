@@ -9,14 +9,15 @@
 	#include "WProgram.h"
 #endif
 
+#define NUM_DISPLAYS 6
 #include "SN74HC595N.h"
 
 class DisplayController
 {
 private:
 	// Private variables
-	byte content_[6] = { B00000000 };
-	byte enabledDisplay_;
+	byte content_[NUM_DISPLAYS] = { B00000000 };
+	byte cycleCounter_ = 0;
 	byte dutycycle_;
 
 	ShiftRegisterPins segmentPins_;
@@ -35,13 +36,10 @@ public:
 	void next();
 
 	// Set the display's content
-	void setContent(byte id);
+	void setContent(byte id, byte content);
 
 	// Set the display's brightness
 	void setDutyCycle(byte dc);
-
-	// Get the display's content
-	byte getContent(byte id);
 
 	// Get the display's brightness
 	byte getDutyCycle();

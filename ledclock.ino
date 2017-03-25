@@ -7,6 +7,13 @@ void setup()
 	// Setup display controller with the pinnumbers toward the shift registers
 	disp = new DisplayController({ 2, 3, 4, 5 }, { 6, 7, 8, 9 });
 
+	disp->setContent(0, 0);
+	disp->setContent(1, 1);
+	disp->setContent(2, 2);
+	disp->setContent(3, 3);
+	disp->setContent(4, 4);
+	disp->setContent(5, 5);
+
 	// Setup ISR
 	noInterrupts();					// Disable interrupts
 	TCCR1A = 0;
@@ -22,7 +29,8 @@ void setup()
 
 void loop()
 {
-
+	disp->next();
+	delay(1000);
   /* add main program code here */
 
 }
