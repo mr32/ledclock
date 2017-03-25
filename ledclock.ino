@@ -5,8 +5,19 @@ ShiftRegister* displaySelector = new ShiftRegister(6, 7, 8, 9);
 
 void setup()
 {
-	 /* add setup code here */
 	segmentSelector->S2P(toSevenSegment(11));
+
+
+	noInterrupts();					// Disable interrupts
+	TCCR1A = 0;
+	TCCR1B = 0;
+	TCNT1 = 0;
+
+	OCR1A = 31250;					// Compare match register for 250Hz
+	TCCR1B |= (1 << CS12);			// Set pre-scalar to 256
+	TIMSK1 |= (1 << OCIE1A);		// Enable Timer Compare Interrupt
+
+	interrupts();					// Enable interrupts
 }
 
 void loop()
@@ -67,4 +78,10 @@ byte toSevenSegment(byte number)
 	}
 
 	return r;
+}
+
+// Triggered on interrupt
+ISR(TIMER1_COMPA_vect)
+{
+
 }
