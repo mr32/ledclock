@@ -21,31 +21,48 @@ DisplayController::~DisplayController()
 
 void DisplayController::next()
 {
-	cycleCounter_ += 1;
+	//cycleCounter_ += 1;
 
-	if (cycleCounter_ >= 5)
-		cycleCounter_ = 0;
-	else if (cycleCounter_ >= brightness_)
+	//if (cycleCounter_ >= 5)
+	//	cycleCounter_ = 0;
+	//else if (cycleCounter_ >= brightness_)
+	//{
+
+	//	return;
+	//}
+
+
+	if (cycleCounter_ == 0)
 	{
 		display_->disable();
-		return;
-	}
-	
-	// Cycle to the next display
-	if (displayCounter_ == NUM_DISPLAYS - 1)
-	{
-		displayCounter_ = 0;
-		display_->S2P(B00000001);
-	}
-	else
-	{
-		displayCounter_ += 1;
-		display_->shift();
-	}
-	// Send data to shift register
-	segment_->S2P(content_[displayCounter_]);
-	display_->enable();
 
+		if (displayCounter_ == NUM_DISPLAYS - 1)
+		{
+			displayCounter_ = 0;
+			display_->S2P(B00000001);
+		}
+		else
+		{
+			displayCounter_ += 1;
+			display_->S2P(B00000001 << displayCounter_);
+		}
+
+		cycleCounter_ += 1;
+
+		segment_->S2P(content_[displayCounter_]);
+	}
+	else if (cycleCounter_ == 1)
+	{
+		display_->enable();
+		cycleCounter_ += 1;
+	}
+	else if (cycleCounter_ == brightness_)
+	{
+		cycleCounter_ = 0;
+		display_->disable();
+	}
+	else 
+		cycleCounter_ += 1;
 }
 
 void DisplayController::setContent(byte id, byte content)
@@ -70,6 +87,9 @@ byte DisplayController::toSevenSegment_(byte input)
 	// Assign segments to byte using: a-b-c-d-e-f-g-DP
 	switch (input)
 	{
+	case -1:
+		r = B00000000;
+		break;
 	case 0:
 		r = B11111100;
 		break;

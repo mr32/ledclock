@@ -30,7 +30,7 @@ ShiftRegister::~ShiftRegister()
 	digitalWrite(p_.OE, HIGH);							// Disable output
 }
 
-void ShiftRegister::S2P(byte input)
+byte ShiftRegister::S2P(byte input)
 {
 	digitalWrite(p_.SRCLR, HIGH);
 
@@ -40,10 +40,10 @@ void ShiftRegister::S2P(byte input)
 		digitalWrite(p_.SRCLK, HIGH);
 		digitalWrite(p_.SRCLK, LOW);
 	}
-
 	digitalWrite(p_.RCLK, HIGH);
-	digitalWrite(p_.OE, LOW);
 	digitalWrite(p_.RCLK, LOW);
+	
+	return 1;
 }
 
 void ShiftRegister::shift()
@@ -55,9 +55,17 @@ void ShiftRegister::shift()
 	// Shift existing content with one place
 	digitalWrite(p_.SRCLK, HIGH);
 	// Enable the output, if it wasn't already
-	digitalWrite(p_.OE, LOW);
+	delayMicroseconds(50);
+	//digitalWrite(p_.OE, LOW);
 	// Lower the clock
 	digitalWrite(p_.SRCLK, LOW);
+	delayMicroseconds(50);
+	// Store to storage
+	digitalWrite(p_.RCLK, HIGH);
+
+	delayMicroseconds(50);
+	// Lower store clock
+	digitalWrite(p_.RCLK, LOW);
 
 }
 
