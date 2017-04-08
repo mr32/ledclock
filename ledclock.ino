@@ -6,11 +6,13 @@ boolean EOL_;
 unsigned long time; 
 unsigned long offset = 0;
 
+
 void setup()
 {
 	Serial.begin(9600);
 	pinMode(12, INPUT);
 	pinMode(13, OUTPUT);
+
 	// Setup display controller with the pinnumbers toward the shift registers
 	disp = new DisplayController({ 2, 3, 4, 5 }, { 6, 7, 8, 9, 10 });
 	buffer.reserve(64);
@@ -25,26 +27,27 @@ void setup()
 
 	// Setup ISR
 	noInterrupts();					// Disable interrupts
-	TCCR1A = 0;
-	TCCR1B = 0;
-	TCNT1 = 0;
+	TCCR2A = 0;
+	TCCR2B = 0;
+	TCNT2 = 0;
 
-	OCR1A = 25;					// Compare match register for 2500Hz
-	TCCR1B |= (1 << WGM12);			// Set to CTC mode
-	TCCR1B |= (1 << CS12);			// Set pre-scalar to 256
-	TIMSK1 |= (1 << OCIE1A);		// Enable Timer Compare Interrupt
+	OCR2A = 25;					// Compare match register for 2500Hz
+	TCCR2B |= (1 << WGM22);			// Set to CTC mode
+	TCCR2B |= (1 << CS22);			// Set pre-scalar to 256
+	TIMSK2 |= (1 << OCIE2A);		// Enable Timer Compare Interrupt
 
 	interrupts();					// Enable interrupts
 }
 
 void loop()
 {
+
 	digitalWrite(13, digitalRead(12));
 	update();
 }
 
 // Triggered on interrupt
-ISR(TIMER1_COMPA_vect)
+ISR(TIMER2_COMPA_vect)
 {
 	disp->next();
 }
@@ -74,6 +77,7 @@ void update()
 
 			Serial.println(time);
 			setTime(time);
+
 		}
 
 		buffer = "";
@@ -105,4 +109,5 @@ void setTime(unsigned long time)
 		i++;
 		time /= 10;
 	} while (time > 0);
+
 }
