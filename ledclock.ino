@@ -7,8 +7,8 @@ DisplayController* disp;
 void setup()
 {
 	// Setup display controller with the pinnumbers toward the shift registers
-	disp = new DisplayController({ 2, 3, 4, 5 }, { 6, 7, 8, 9, 10 });
-	time = new GPSTIME(12, setTime);
+	disp = new DisplayController({ 4, 5, 6, 7 }, { 8, 9, 10, 11, 12 });
+	time = new GPSTIME(2, setTime);
 
 	disp->setContent(0, 10);
 	disp->setContent(1, 10);
@@ -48,15 +48,8 @@ void serialEvent()
 	time->serialIn();
 }
 
-void setTime(unsigned long time)
+void setTime(char* time)
 {
-	byte i = 0;
-
-	do {
-		int digit = time % 10;
-		disp->setContent(i, digit);
-		i++;
-		time /= 10;
-	} while (time > 0);
-
+	for (byte i = 0; i < 6; i++)
+		disp->setContent(i, (int)time[i] - 48);
 }

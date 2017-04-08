@@ -9,17 +9,22 @@
 	#include "WProgram.h"
 #endif
 
+enum Time { H2, H1, M2, M1, S2, S1 };
+
 class GPSTIME {
 private:
 	unsigned long time_, offset_;
+	char t_[7];
 	boolean EOL_;
 	String buffer_;
 	byte pPPS_;
-	void(*triggerUpdate_)(unsigned long);
+	void(*triggerUpdate_)(char*);
 
 	void writeTime();
+	static void sync();
+
 public:
-	GPSTIME(byte pPPS, void (*callback)(unsigned long));
+	GPSTIME(byte pPPS, void (*callback)(char*));
 	~GPSTIME();
 
 	void serialIn();
