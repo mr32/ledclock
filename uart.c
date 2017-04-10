@@ -24,3 +24,4 @@ ISR(USART0_RXC_vect)
     // Read received byte from register UDR
     rx = UDR0;
 }
+
