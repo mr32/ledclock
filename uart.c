@@ -13,6 +13,7 @@ void UART_Init()
     // Enable UART receiver and transmitter
     UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
 
+    // Enable RX interrupts
     UCSR0B |= (1 << RXCIE0);
 }
 
@@ -27,43 +28,28 @@ void UART_End()
 
 void UART_Send(unsigned char c)
 {
-    //unsigned char length = strlen(str);
-    //unsigned char i = 0;
+    // Wait until buffer is empty
+    while ( !(UCSR0A & (1 << UDRE0))){};
 
-    while ( !(UCSR0A & (1 << UDRE0))){};/*&& (i < length)*/
+    // Place charachter in buffer
     UDR0 = c;
-        //UDR0 = str[i];
-        //i++;
+
 }
 
 unsigned char UART_Receive()
 {
+    // Wait until buffer is filled
     while ( !(UCSR0A & (1 << RXC0)) ) {};
+
+    // Read character from buffer
     return UDR0;
 }
 
 // Triggered when RX receives a byte
 ISR(USART_RX_vect, ISR_BLOCK)
 {
-    // while ( !(UCSR0A & (1 << RXC0)) );
-
-    // if (rxno == INPUT_BUFFER_SIZE)
-    //     rxno = 0;
-    
-    // rx[rxno++] = UDR0;
-    
+    // Read byte from buffer and return immediately
+    // TODO: replace by Ring Buffer
     volatile unsigned char rx = UDR0;
     UDR0 = rx;
-
-    // If a sentence has not been read, ignore the incoming data
-    // if (UART_SentenceReceived)
-    //     return;
-
-    // // Check for sentence termination, otherwise add input to buffer
-    // if (rx == '\n')
-    //     UART_SentenceReceived = true;
-    // else
-    //     UART_RX_Buffer += rx;    
-
-    PORTB &= ~_BV(PORTB5);
 }

@@ -6,14 +6,12 @@
 
 void main(void)
 {
-    DDRB |= _BV(DDB5);
-
-    PORTB |= _BV(PORTB5);
-
+    // Initialize UART interface
     UART_Init();
 
+    // Enable Global Interrupts
     sei();
-
+    
     while(1)
     {
         //UART_Send(UART_Receive());
