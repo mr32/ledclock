@@ -1,16 +1,21 @@
-#include "uart.h"
-
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <stdbool.h>
 
 #include "uart.h"
 
-
-int main(void)
+void main(void)
 {
-    // Enable the Global Interrupt Enable flag to ensure interrupts are being triggered
+    DDRB |= _BV(DDB5);
+
+    PORTB |= _BV(PORTB5);
+
+    UART_Init();
+
     sei();
 
-    // Initialize UART port
-    UART_Init();
+    while(1)
+    {
+        //UART_Send(UART_Receive());
+    }
 }
