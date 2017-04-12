@@ -46,15 +46,18 @@ int rbuf_get(rbuf *_this)
     else 
         c = -1;
 
+    // Return either a character or -1
     return c;
 }
 
 bool rbuf_full(rbuf *_this)
 {
+    // Return true if buffer is full
     return (_this->count >= RBUF_SIZE);
 }
 
 bool rbuf_empty(rbuf *_this)
 {
+    // Return false if buffer is empty
     return (_this->count == 0);
 }
