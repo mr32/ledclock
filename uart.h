@@ -6,12 +6,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include "rbuf.h"
 
 #define FCPU                16000000
 #define BAUD_RATE           9600
 #define BAUD_PRESCALE       ((((FCPU / 16) + (BAUD_RATE / 2)) / (BAUD_RATE)) - 1)
 
 #define INPUT_BUFFER_SIZE   100 
+
+volatile rbuf buf;
+volatile bool rxSC = false;
 
 // Enable UART interface and setup the corresponding CLK
 void UART_Init();
