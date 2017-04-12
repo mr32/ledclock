@@ -57,7 +57,7 @@ ISR(USART_RX_vect, ISR_BLOCK)
         // Line ending received, set flag for other routines
         if (c == '\n')
         {
-            rxSC = true;
+            flag_rxSC = true;
         }        
     }
 }
