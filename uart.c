@@ -15,6 +15,9 @@ void UART_Init()
 
     // Enable RX interrupts
     UCSR0B |= (1 << RXCIE0);
+
+    // Set 'received sentence' flag to 0
+    flag_rxSC = false;
 }
 
 void UART_End()
