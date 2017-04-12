@@ -15,7 +15,6 @@
 #define INPUT_BUFFER_SIZE   100 
 
 rbuf buf;
-bool flag_rxSC;
 
 // Enable UART interface and setup the corresponding CLK
 void UART_Init();

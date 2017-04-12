@@ -4,6 +4,10 @@ void rbuf_init(rbuf *_this)
 {
     // Clear the given structure
     memset(_this, 0, sizeof(*_this));
+
+    // Set 'received sentence' flag to 0
+    flag_rxSC = false;
+
 }
 
 void rbuf_flush(rbuf *_this, bool clear)
@@ -28,7 +32,13 @@ void rbuf_put(rbuf *_this, const unsigned char c)
     {
         _this->buf[_this->head] = c;
         _this->head = (_this->head + 1) % RBUF_SIZE;
-        _this->count++;
+        _this->count += 1;
+
+        // Line ending received, set flag for other routines
+        if (c == 10 || c == 13)
+        {
+            flag_rxSC = true;
+        }   
     }
 }
 
@@ -40,11 +50,14 @@ int rbuf_get(rbuf *_this)
     if (_this->count > 0)
     {
         c = _this->buf[_this->tail];
-        _this->tail = (_this->tail - 1) % RBUF_SIZE;
-        _this->count--;
+        _this->tail = (_this->tail + 1) % RBUF_SIZE;
+        _this->count -= 1;
     }
     else 
         c = -1;
+
+    // Reset flag
+    flag_rxSC = false;
 
     // Return either a character or -1
     return c;

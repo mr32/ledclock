@@ -16,8 +16,8 @@ void UART_Init()
     // Enable RX interrupts
     UCSR0B |= (1 << RXCIE0);
 
-    // Set 'received sentence' flag to 0
-    flag_rxSC = false;
+    // Initialize buffer
+    rbuf_init(&buf);
 }
 
 void UART_End()
@@ -44,8 +44,10 @@ unsigned char UART_Receive()
     // Wait until buffer is filled
     while ( !(UCSR0A & (1 << RXC0)) ) {};
 
+    rbuf_put(&buf, UDR0);
+
     // Read character from buffer
-    return UDR0;
+    return rbuf_get(&buf);
 }
 
 // Triggered when RX receives a byte
@@ -55,12 +57,6 @@ ISR(USART_RX_vect, ISR_BLOCK)
     if (!rbuf_full(&buf))
     {
         unsigned char c = UDR0;
-        rbuf_put(&buf, c);
-
-        // Line ending received, set flag for other routines
-        if (c == '\n')
-        {
-            flag_rxSC = true;
-        }        
+        rbuf_put(&buf, c);     
     }
 }

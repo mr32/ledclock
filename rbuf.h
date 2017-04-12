@@ -8,6 +8,7 @@
 
 // Define 8-bit integer type
 typedef unsigned char uint8_t;
+bool flag_rxSC;
 
 // Define buffer
 typedef struct rbuf 
