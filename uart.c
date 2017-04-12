@@ -48,8 +48,16 @@ unsigned char UART_Receive()
 // Triggered when RX receives a byte
 ISR(USART_RX_vect, ISR_BLOCK)
 {
-    // Read byte from buffer and return immediately
-    // TODO: replace by Ring Buffer
-    volatile unsigned char rx = UDR0;
-    UDR0 = rx;
+    // Store incoming byte directly in a ring buffer
+    if (!rbuf_full(&buf))
+    {
+        unsigned char c = UDR0;
+        rbuf_put(&buf, c);
+
+        // Line ending received, set flag for other routines
+        if (c == '\n')
+        {
+            rxSC = true;
+        }        
+    }
 }
