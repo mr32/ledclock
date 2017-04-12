@@ -11,7 +11,7 @@ void main(void)
     char buffer[128];
     int i = 0;
 
-    while(1)
+    while (1)
     {
         while (!rbuf_empty(&buf))
         {
