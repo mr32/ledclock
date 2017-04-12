@@ -8,7 +8,7 @@ ledclock: main.o uart.o rbuf.o
 	$(CC) -mmcu=$(MMCU) main.o uart.o rbuf.o -o main
 	avr-objcopy -O ihex -R .eeprom main main.hex
 
-main.o: main.c
+main.o: main.c main.h
 	$(CC) $(CFLAGS) main.o main.c
 
 uart.o: uart.c uart.h
@@ -21,4 +21,4 @@ upload:
 	sudo avrdude -F -V -c arduino -p ATMEGA328P -P /dev/ttyACM0 -b 115200 -U flash:w:main.hex
 
 clean:
-	rm main.o main main.hex uart.o rbuf.o
+	rm main main.hex main.o uart.o rbuf.o
