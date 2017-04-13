@@ -21,10 +21,7 @@ struct Time {
 };
 
 struct Time* time;
-
-#ifdef __DEBUG
 char* time_str;
-#endif
 
 // Initiate time by reserving the required memory
 void time_init();
@@ -32,10 +29,7 @@ void time_init();
 bool time_extractFromGps(char* nmeaMsg);
 // Returns the time in a Time format
 struct Time* time_get();
-
-#ifdef __DEBUG
 // Returns the time as a String
 char* time_toStr();
-#endif
 
 #endif
