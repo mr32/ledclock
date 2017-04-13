@@ -18,6 +18,8 @@ void UART_Init()
 
     // Initialize buffer
     rbuf_init(&buf);
+
+    buffer = malloc(128 * sizeof(char));
 }
 
 void UART_End()
@@ -51,7 +53,7 @@ unsigned char UART_Receive()
 }
 
 // Triggered when RX receives a byte
-ISR(USART_RX_vect, ISR_BLOCK)
+ISR(USART_RX_vect)
 {
     // Store incoming byte directly in a ring buffer
     if (!rbuf_full(&buf))
@@ -59,4 +61,7 @@ ISR(USART_RX_vect, ISR_BLOCK)
         unsigned char c = UDR0;
         rbuf_put(&buf, c);     
     }
+
+    
+
 }
