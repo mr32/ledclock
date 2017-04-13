@@ -29,14 +29,34 @@ void UART_End()
     UCSR0B |= (0 << RXCIE0);
 }
 
-void UART_Send(unsigned char c)
+void UART_Send(char* str)
 {
-    // Wait until buffer is empty
+    for (uint8_t i = 0; i < strlen(str) - 1; i++)
+    {
+        // Wait until buffer is empty
+        while ( !(UCSR0A & (1 << UDRE0))){};
+
+        // Place charachter in buffer
+        UDR0 = str[i];
+    }
+}
+
+void UART_SendLine(char* str)
+{
+    for (uint8_t i = 0; i < strlen(str) - 1; i++)
+    {
+        // Wait until buffer is empty
+        while ( !(UCSR0A & (1 << UDRE0))){};
+
+        // Place charachter in buffer
+        UDR0 = str[i];
+    }
+    
+    // Send <CR><LF> to start a new line
     while ( !(UCSR0A & (1 << UDRE0))){};
-
-    // Place charachter in buffer
-    UDR0 = c;
-
+    UDR0 = '\n';
+    while ( !(UCSR0A & (1 << UDRE0))){};
+    UDR0 = '\r';
 }
 
 unsigned char UART_Receive()

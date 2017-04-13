@@ -23,7 +23,8 @@ void UART_Init();
 void UART_End();
 
 // Transmit data over UART interface
-void UART_Send(unsigned char c);
+void UART_Send(char* str);
+void UART_SendLine(char* str);
 
 // Receive data over UART interface
 unsigned char UART_Receive();
