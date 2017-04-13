@@ -4,14 +4,11 @@ void time_init()
 {
     // Reserve memory to keep the time
     time = malloc(sizeof(struct Time));
+    time_str = malloc(6 * sizeof(char));
 
     // Set memory content to nothing
     memset(time, 0, sizeof(struct Time));
-
-#ifdef __DEBUG    
-    time_str = malloc(6 * sizeof(char));
     memset(time_str, 0, 6 * sizeof(char));
-#endif
 }
 
 bool time_extractFromGps(char* nmeaMsg)
@@ -57,7 +54,6 @@ struct Time* time_get()
     return time;
 }
 
-#ifdef __DEBUG
 char* time_toStr()
 {
     // Convert time to a character array
@@ -70,4 +66,3 @@ char* time_toStr()
 
     return time_str;
 }
-#endif
