@@ -10,6 +10,7 @@
 
 typedef unsigned char uint8_t;
 
+// Define Time struct, which separates the time variables
 struct Time {
     uint8_t hh;
     uint8_t h;
@@ -20,12 +21,21 @@ struct Time {
 };
 
 struct Time* time;
+
+#ifdef __DEBUG
 char* time_str;
+#endif
 
+// Initiate time by reserving the required memory
 void time_init();
+// Find time from the given NMEA message and stores it in the time obj
 bool time_extractFromGps(char* nmeaMsg);
+// Returns the time in a Time format
 struct Time* time_get();
-char* time_toStr();
 
+#ifdef __DEBUG
+// Returns the time as a String
+char* time_toStr();
+#endif
 
 #endif
