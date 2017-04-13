@@ -11,45 +11,41 @@ void main(void)
     // Enable Global Interrupts
     sei();
 
+    // Initiate second buffer
     char* buffer;
     buffer = malloc(128 * sizeof(char));
-
-    int i = 0;
+    uint8_t i = 0;
 
     while (1)
     {
+        // Do things while there is stuff in the inputbuffer
         while (!rbuf_empty(&buf))
         {
+            // Get the latest data
             buffer[i] = rbuf_get(&buf);
-            // UART_Send(rbuf_get(&buf));
             
+            // Check if there are <CR> symbols that indicate the end 
+            // of a NMEA string
             if (buffer[i] == '\n')
             {
-//                 for(uint8_t j = 0; j < i; j++)
-//                 {
-                    if(time_extractFromGps(buffer))
+                // Check if there is new time information
+                if(time_extractFromGps(buffer))
+                {
+                    // Print time
+                    char* t = time_toStr();
+                    for (uint8_t k = 0; k < 6; k++)
                     {
-                        char* t = time_toStr();
-                        for (uint8_t k = 0; k < 6; k++)
-                        {
-                            UART_Send(t[k]);
-                        }
-                        UART_Send('\n');
+                        UART_Send(t[k]);
                     }
+                    UART_Send('\n');
+                }
 
-                    // for (uint8_t k = 0; k < i + 1; k++)
-                    // {
-                    //     UART_Send(buffer[k]);
-                    // }
-
-                    memset(buffer, 0, i * sizeof(char));
-                    i = -1;
-
-
-//                 }
-//                 i = -1; 
+                // Other data is not needed, discard and start over
+                memset(buffer, 0, i * sizeof(char));
+                i = -1;
             }
 
+            // Next character
             i++;
         }
     }

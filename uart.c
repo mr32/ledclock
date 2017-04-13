@@ -18,8 +18,6 @@ void UART_Init()
 
     // Initialize buffer
     rbuf_init(&buf);
-
-    buffer = malloc(128 * sizeof(char));
 }
 
 void UART_End()
@@ -61,7 +59,4 @@ ISR(USART_RX_vect)
         unsigned char c = UDR0;
         rbuf_put(&buf, c);     
     }
-
-    
-
 }

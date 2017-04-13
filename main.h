@@ -4,3 +4,5 @@
 
 #include "uart.h"
 #include "time.h"
+
+#define __DEBUG
