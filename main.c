@@ -33,12 +33,14 @@ void main(void)
                 {
 #ifdef __DEBUG                    
                     // Print time
-                    char* t = time_toStr();
-                    for (uint8_t k = 0; k < 6; k++)
-                    {
-                        UART_Send(t[k]);
-                    }
-                    UART_Send('\n');
+                    // char* t = time_toStr();
+                    // for (uint8_t k = 0; k < 6; k++)
+                    // {
+                    //     UART_Send(t[k]);
+                    // }
+                    // UART_Send('\n');
+
+                    UART_SendLine(time_toStr());
 #endif              
                 }
 
