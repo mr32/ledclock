@@ -47,6 +47,7 @@ void shiftreg_flush(shiftreg *_this)
     // Reset data on register
     gpio_set(_this->SRCLR, LOW);
     gpio_set(_this->SRCLR, HIGH);
+    shiftreg_set(_this);
 }
 
 void shiftreg_disable(shiftreg *_this)

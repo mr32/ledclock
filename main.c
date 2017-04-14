@@ -1,7 +1,5 @@
 #include "main.h"
 
-shiftreg sreg;
-
 void main(void)
 {
     // Initialize UART interface
@@ -10,19 +8,23 @@ void main(void)
     // Initialize time
     time_init();
 
-    // Init sreg
-
-    shiftreg_init(&sreg, 4, 5, 6, 7, 8);
+    // Initialize display
+    display_init();
 
     // Enable Global Interrupts
     sei();
+
+    display_set(0, 0);
+    display_set(1, 1);
+    display_set(2, 2);
+    display_set(3, 3);
+    display_set(4, 4);
+    display_set(5, 5);
 
     // Initiate second buffer
     char* buffer;
     buffer = malloc(128 * sizeof(char));
     uint8_t i = 0;
-
-    UART_SendLine(&sreg.SER);
 
     while (1)
     {

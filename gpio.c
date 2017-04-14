@@ -339,7 +339,7 @@ bool gpio_get(uint8_t pin)
 void gpio_init_PWMT0()
 {
     // Set non-inverting Fast PWM on pin 6
-    TCCR0A |= (1 << COM0A1) | (1 << WGM00) | (1 << WGM01);
+    TCCR0A |= (1 << COM0A1) | (1 << COM0A0) | (1 << WGM00) | (1 << WGM01);
 
     // Set pre-scaler to 64 to get a frequency of 976Hz
     TCCR0B |= (1 << CS01) | (1 << CS00);
