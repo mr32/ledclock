@@ -2,10 +2,14 @@
 
 void display_init()
 {
-    shiftreg_init(&displayreg, 8, 9, 10, 11);
-    shiftreg_init(&segmentreg, 4, 5, 6, 7);
+    shiftreg_init(&displayreg, 9, 10, 11, 12);
+    shiftreg_init(&segmentreg, 4, 5, 7, 8);
+    gpio_init_PWMT0();
+	gpio_set_ISRT0();
 
     currentDisplay = 0;
+
+    display_setBrightness(10);
 }
 
 void display_set(uint8_t dispID, uint8_t content)
@@ -15,15 +19,20 @@ void display_set(uint8_t dispID, uint8_t content)
         disp[dispID] = toSegment(content);
 }
 
+void display_setBrightness(uint8_t brightness)
+{
+    gpio_set_DCT0(brightness);
+}
+
 static void next()
 {
     // Go to the next display and show the right content
-    shiftreg_s2p(&displayreg, (1 << currentDisplay));
     shiftreg_s2p(&segmentreg, disp[currentDisplay]);
+    shiftreg_s2p(&displayreg, (1 << currentDisplay));
 
     // Swap buffers to output
-    shiftreg_set(&displayreg);
     shiftreg_set(&segmentreg);
+    shiftreg_set(&displayreg);
 
     // Increase display counter for the next call
     currentDisplay = (currentDisplay + 1) % NO_DISPLAYS;
@@ -40,37 +49,37 @@ static uint8_t toSegment(char input)
 		r = 0x00; // B00000000
 		break;
 	case 0:
-		r = 0xFC; // B11111100
+		r = 0x3F; // B11111100
 		break;
 	case 1:
-		r = 0x60; // B01100000
+		r = 0x06; // B01100000
 		break;
 	case 2:
-		r = 0xDA; // B11011010
+		r = 0x5B; // B11011010
 		break;
 	case 3:
-		r = 0xF2; // B11110010
+		r = 0x4F; // B11110010
 		break;
 	case 4:
 		r = 0x66; // B01100110
 		break;
 	case 5:
-		r = 0xB6; // B10110110
+		r = 0x6D; // B10110110
 		break;
 	case 6:
-		r = 0xBE; // B10111110
+		r = 0x7D; // B10111110
 		break;
 	case 7:
-		r = 0xE0; // B11100000
+		r = 0x07; // B11100000
 		break;
 	case 8:
-		r = 0xFE; // B11111110
+		r = 0xF7; // B11111110
 		break;
 	case 9:
-		r = 0xF6; // B11110110
+		r = 0x6F; // B11110110
 		break;
 	default:
-		r = 0x02; // B00000010
+		r = 0x80; // B00000010
 	}
 
 	return r;

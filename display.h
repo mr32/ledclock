@@ -18,6 +18,7 @@ static uint8_t currentDisplay;
 
 void display_init();
 void display_set(uint8_t dispID, uint8_t content);
+void display_setBrightness(uint8_t brightness);
 
 static void next();
 static uint8_t toSegment(char input);
