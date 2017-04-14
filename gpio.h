@@ -33,4 +33,8 @@ void gpio_set_DCT0(uint8_t dc);
 void gpio_set_DCT1(int dc);
 void gpio_set_DCT2(uint8_t dc);
 
+// Enable interrupt
+void gpio_set_ISRT0()
+void gpio_set_ISRT2()
+
 #endif

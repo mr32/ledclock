@@ -369,3 +369,15 @@ void gpio_set_DCT2(uint8_t dc)
 {
     OCR2A = dc;
 }
+
+void gpio_set_ISRT0()
+{
+    // Interrupt on falling edge of PWM0A
+    TIMSK0 |= (1 << OCIE0A);
+}
+
+void gpio_set_ISRT2()
+{
+    // Interrupt on falling edge of PWM2A
+    TIMSK2 |= (1 << OCIE2A);
+}
