@@ -12,14 +12,14 @@ typedef struct shiftreg
     uint8_t RCLK;
     uint8_t SRCLK;
     uint8_t SRCLR;
-    uint8_t OE;
+    //uint8_t OE;
 
     // Data buffer
     uint8_t data;
 } shiftreg;
 
 // Initiate shiftregister
-void shiftreg_init(shiftreg *_this, uint8_t SER_, uint8_t RCLK_, uint8_t SRCLK_, uint8_t SRCLR_, uint8_t OE_);
+void shiftreg_init(shiftreg *_this, uint8_t SER_, uint8_t RCLK_, uint8_t SRCLK_, uint8_t SRCLR_);
 
 // Serialize data to the shift register buffer
 void shiftreg_s2p(shiftreg *_this, uint8_t _data);
