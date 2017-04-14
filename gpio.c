@@ -348,7 +348,24 @@ void gpio_init_PWMT0()
     DDRD |= (1 << PD6);
 }
 
+void gpio_init_PWMT2()
+{
+    // Set non-inverting Fast PWM on pin 11
+    TCCR2A |= (1 << COM2A1) | (1 << WGM20) | (1 << WGM21);
+
+    // Set pre-scaler to 64 to get a frequency of 976Hz
+    TCCR2B |= (1 << CS21) | (1 << CS20);
+
+    // Set that same pin to OUTPUT
+    DDRB |= (1 << PB3);
+}
+
 void gpio_set_DCT0(uint8_t dc)
 {
     OCR0A = dc;
+}
+
+void gpio_set_DCT2(uint8_t dc)
+{
+    OCR2A = dc;
 }
