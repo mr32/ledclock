@@ -1,19 +1,19 @@
 #include "shiftreg.h"
 
-void shiftreg_init(shiftreg *_this, uint8_t SER_, uint8_t RCLK_, uint8_t SRCLK_, uint8_t SRCLR_, uint8_t OE_)
+void shiftreg_init(shiftreg *_this, uint8_t SER_, uint8_t RCLK_, uint8_t SRCLK_, uint8_t SRCLR_)
 {
     // Prepare outputs
     _this->SER = SER_;
     _this->RCLK = RCLK_;
     _this->SRCLK = SRCLK_;
     _this->SRCLR = SRCLR_;
-    _this->OE = OE_;
+    //_this->OE = OE_;
 
     gpio_setPinMode(_this->SER, OUTPUT);
     gpio_setPinMode(_this->RCLK, OUTPUT);
     gpio_setPinMode(_this->SRCLK, OUTPUT);
     gpio_setPinMode(_this->SRCLR, OUTPUT);
-    gpio_setPinMode(_this->OE, OUTPUT);
+    //gpio_setPinMode(_this->OE, OUTPUT);
 }
 
 void shiftreg_s2p(shiftreg *_this, uint8_t _data)
@@ -52,11 +52,11 @@ void shiftreg_flush(shiftreg *_this)
 void shiftreg_disable(shiftreg *_this)
 {
     // Disable output
-    gpio_set(_this->OE, HIGH);
+    //gpio_set(_this->OE, HIGH);
 }
 
 void shiftreg_enable(shiftreg *_this)
 {
     // Enable output
-    gpio_set(_this->OE, LOW);
+    //gpio_set(_this->OE, LOW);
 }
