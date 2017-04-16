@@ -9,7 +9,7 @@ void display_init()
 
     currentDisplay = 0;
 
-    display_setBrightness(10);
+    display_setBrightness(200);
 }
 
 void display_set(uint8_t dispID, uint8_t content)
@@ -21,7 +21,7 @@ void display_set(uint8_t dispID, uint8_t content)
 
 void display_setBrightness(uint8_t brightness)
 {
-    gpio_set_DCT0(brightness);
+    gpio_set_DCT0(255 - brightness);
 }
 
 static void next()
@@ -86,7 +86,7 @@ static uint8_t toSegment(char input)
 }
 
 
-ISR(TIMER0_COMPA_vect)
+ISR(TIMER0_OVF_vect)
 {
     // Called at every falling edge of the PWM signal
     // The LOW period can be used to set the register 

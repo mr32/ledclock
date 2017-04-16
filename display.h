@@ -4,6 +4,7 @@
 #define NO_DISPLAYS 6
 
 #include <avr/interrupt.h>
+#include <util/delay.h>
 #include "shiftreg.h"
 
 typedef unsigned char uint8_t;
