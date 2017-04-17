@@ -79,6 +79,7 @@ ISR(TIMER1_COMPA_vect)
     if (s)
         return;
     // Executed every 0.5 seconds
+    time_increment();
 
     display_set(0, time->hh);
     display_set(1, time->h);
@@ -97,11 +98,10 @@ ISR(INT0_vect)
     TCNT1H = 0x00;
     TCNT1L = 0x00;
 
+    s = 1;
     gpio_set(3, s);
-    s = !s;
 
-    if (s)
-        return;
+    s = 0;
     // Executed every 0.5 seconds
 
     display_set(0, time->hh);

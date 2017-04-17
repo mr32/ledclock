@@ -31,5 +31,7 @@ bool time_extractFromGps(char* nmeaMsg);
 struct Time* time_get();
 // Returns the time as a String
 char* time_toStr();
+// Increase time with one second 
+void time_increment();
 
 #endif

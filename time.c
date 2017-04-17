@@ -42,6 +42,8 @@ bool time_extractFromGps(char* nmeaMsg)
         time->ss = _N(p[4]);
         time->s  = _N(p[5]);
 
+    
+
         return 1;
     }
 
@@ -65,4 +67,44 @@ char* time_toStr()
     time_str[5] = _C(time->s);
 
     return time_str;
+}
+
+void time_increment()
+{
+    time->s += 1;
+
+    if (time->s > 9)
+    {
+    time->s = 0;
+    time->ss += 1;
+
+        if (time->ss > 5)
+        {
+            time->ss = 0;
+            time->m += 1;
+
+            if (time->m > 9)
+            {
+                time->m = 0;
+                time->mm += 1;
+
+                if (time->mm > 5)
+                {
+                    time->mm = 0;
+                    time->h += 1;
+
+                    if (time->h > 9)
+                    {
+                        time->h = 0;
+                        time->hh += 1;
+
+                        if (time->hh > 2)
+                        {
+                            time->hh = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
