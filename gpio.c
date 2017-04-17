@@ -338,14 +338,27 @@ bool gpio_get(uint8_t pin)
 
 void gpio_init_PWMT0()
 {
-    // Set non-inverting Fast PWM on pin 6
-    TCCR0A |= (1 << COM0A1) /*| (1 << COM0A0)*/ | (1 << WGM00);// | (1 << WGM01);
+    // Set inverting Phase Correct PWM
+    TCCR0A |= (1 << COM0A1) | (1 << WGM00);
 
-    // Set pre-scaler to 64 to get a frequency of 976Hz
+    // Set pre-scaler to 64 to get a frequency of 490Hz
     TCCR0B |= (1 << CS01) | (1 << CS00);
 
     // Set that same pin to OUTPUT
     DDRD |= (1 << PD6);
+}
+
+void gpio_init_CTCT1()
+{
+    // Set Timer to CTC mode
+    TCCR1B |= (1 << WGM12);
+
+    // Set pre-scalar for a interrupt frequency of 2Hz
+    TCCR1B |= (1 << CS12);
+
+    // Set compare value 
+    OCR1AL = (unsigned char)CTC_2HZ;
+    OCR1AH = (unsigned char)(CTC_2HZ >> 8);
 }
 
 void gpio_init_PWMT2()
@@ -365,6 +378,11 @@ void gpio_set_DCT0(uint8_t dc)
     OCR0A = dc;
 }
 
+void gpio_set_DCT1(int dc)
+{
+    OCR1A = dc;
+}
+
 void gpio_set_DCT2(uint8_t dc)
 {
     OCR2A = dc;
@@ -372,8 +390,13 @@ void gpio_set_DCT2(uint8_t dc)
 
 void gpio_set_ISRT0()
 {
-    // Interrupt on falling edge of PWM0A
+    // Interrupt on the center of the HIGH period (TOP)
     TIMSK0 |= (1 << TOIE0);
+}
+
+void gpio_set_ISRT1()
+{
+    TIMSK1 |= (1 << OCIE1A);
 }
 
 void gpio_set_ISRT2()
