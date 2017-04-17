@@ -13,7 +13,7 @@ void time_init()
 
 bool time_extractFromGps(char* nmeaMsg)
 {
-    // This is what we want: $GPGLL,5130.58772,N,00530.11096,E,130132.00,A,A*6A
+    // This is what we want: $GPGLL,xxxx.xxxxx,N,xxxx.xxxxx,E,130132.00,A,A*6A
 
     // Find the $GPGLL identifier
     if (strncmp(nmeaMsg, "$GPGLL", 6 * sizeof(char)) == 0)
