@@ -41,4 +41,8 @@ void gpio_set_ISRT0();
 void gpio_set_ISRT1();
 void gpio_set_ISRT2();
 
+// Set External interrupt
+void gpio_set_ISRINT0();
+
+
 #endif

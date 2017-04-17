@@ -15,6 +15,14 @@ void main(void)
     gpio_init_CTCT1();
     gpio_set_ISRT1();
 
+    // Init Colon pin
+    gpio_setPinMode(3, OUTPUT);
+    gpio_set(3, LOW);
+
+    // Set PPS pin
+    gpio_setPinMode(2, INPUT);
+    gpio_set_ISRINT0();
+
     // Enable Global Interrupts
     sei();
 
@@ -25,7 +33,7 @@ void main(void)
     display_set(4, '-');
     display_set(5, '-');
 
-
+    s = 0;
 
     // Initiate second buffer
     char* buffer;
@@ -65,6 +73,11 @@ void main(void)
 
 ISR(TIMER1_COMPA_vect)
 {
+    gpio_set(3, s);
+    s = !s;
+
+    if (s)
+        return;
     // Executed every 0.5 seconds
 
     display_set(0, time->hh);
@@ -77,3 +90,24 @@ ISR(TIMER1_COMPA_vect)
 
 }
 
+ISR(INT0_vect)
+{
+    // Executed on PPS HIGH
+    // Reset TIMER1 Counter to sync with the PPS pulse
+    TCNT1H = 0x00;
+    TCNT1L = 0x00;
+
+    gpio_set(3, s);
+    s = !s;
+
+    if (s)
+        return;
+    // Executed every 0.5 seconds
+
+    display_set(0, time->hh);
+    display_set(1, time->h);
+    display_set(2, time->mm);
+    display_set(3, time->m);
+    display_set(4, time->ss);
+    display_set(5, time->s);
+}

@@ -10,3 +10,4 @@
 #include "time.h"
 #include "display.h"
 
+static bool s;

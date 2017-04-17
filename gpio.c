@@ -357,20 +357,19 @@ void gpio_init_CTCT1()
     TCCR1B |= (1 << CS12);
 
     // Set compare value 
-    OCR1AL = (unsigned char)CTC_2HZ;
-    OCR1AH = (unsigned char)(CTC_2HZ >> 8);
+    OCR1A = CTC_2HZ;
 }
 
 void gpio_init_PWMT2()
 {
     // Set non-inverting Fast PWM on pin 11
-    TCCR2A |= (1 << COM2A1) | (1 << WGM20) | (1 << WGM21);
+    // TCCR2A |= (1 << COM2A1) | (1 << WGM20) | (1 << WGM21);
 
-    // Set pre-scaler to 64 to get a frequency of 976Hz
-    TCCR2B |= (1 << CS21) | (1 << CS20);
+    // // Set pre-scaler to 64 to get a frequency of 976Hz
+    // TCCR2B |= (1 << CS21) | (1 << CS20);
 
-    // Set that same pin to OUTPUT
-    DDRB |= (1 << PB3);
+    // // Set that same pin to OUTPUT
+    // //DDRB |= (1 << PB3);
 }
 
 void gpio_set_DCT0(uint8_t dc)
@@ -403,4 +402,13 @@ void gpio_set_ISRT2()
 {
     // Interrupt on falling edge of PWM2A
     TIMSK2 |= (1 << OCIE2A);
+}
+
+void gpio_set_ISRINT0()
+{
+    // Interrupt on rising edge of INT0
+    EICRA |= (1 << ISC01) | (1 << ISC00);   
+
+    // Enable interrupt
+    EIMSK |= (1 << INT0);
 }
