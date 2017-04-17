@@ -11,15 +11,21 @@ void main(void)
     // Initialize display
     display_init();
 
+    // Initialize TIMER2
+    gpio_init_CTCT1();
+    gpio_set_ISRT1();
+
     // Enable Global Interrupts
     sei();
 
-    display_set(0, 0);
-    display_set(1, 1);
-    display_set(2, 2);
-    display_set(3, 3);
-    display_set(4, 4);
-    display_set(5, 5);
+    display_set(0, '-');
+    display_set(1, '-');
+    display_set(2, '-');
+    display_set(3, '-');
+    display_set(4, '-');
+    display_set(5, '-');
+
+
 
     // Initiate second buffer
     char* buffer;
@@ -56,3 +62,18 @@ void main(void)
         }
     }
 }
+
+ISR(TIMER1_COMPA_vect)
+{
+    // Executed every 0.5 seconds
+
+    display_set(0, time->hh);
+    display_set(1, time->h);
+    display_set(2, time->mm);
+    display_set(3, time->m);
+    display_set(4, time->ss);
+    display_set(5, time->s);
+
+
+}
+
