@@ -16,7 +16,7 @@ void display_set(uint8_t dispID, uint8_t content)
 {
     // Store the content to the corresponding display buffer
     if (dispID < NO_DISPLAYS)
-        disp[dispID] = toSegment(content);
+		disp[dispID] = toSegment(content);
 }
 
 void display_setBrightness(uint8_t brightness)
@@ -45,9 +45,6 @@ static uint8_t toSegment(char input)
     
     switch (input)
 	{
-	case -1:
-		r = 0x00; // B00000000
-		break;
 	case 0:
 		r = 0x3F; // B11111100
 		break;
@@ -73,13 +70,16 @@ static uint8_t toSegment(char input)
 		r = 0x07; // B11100000
 		break;
 	case 8:
-		r = 0xF7; // B11111110
+		r = 0x7F; // B11111110
 		break;
 	case 9:
 		r = 0x6F; // B11110110
 		break;
+	case '-':
+		r = 0x40; // B00000010
+		break;
 	default:
-		r = 0x80; // B00000010
+		r = 0x00; // B00000000
 	}
 
 	return r;
