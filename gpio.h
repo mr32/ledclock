@@ -23,6 +23,12 @@ void gpio_set(uint8_t pin, bool value);
 // Get the GPIO logic level
 bool gpio_get(uint8_t pin);
 
+// Initialize an ADC
+void gpio_set_ADC();
+
+// Measure an analog input and return the value
+int gpio_get_ADC(uint8_t pin);
+
 // Use PWM
 void gpio_init_PWMT0(); // Phase Correct PWM
 void gpio_init_PWMT2(); // Fast PWM

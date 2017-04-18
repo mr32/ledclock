@@ -336,6 +336,33 @@ bool gpio_get(uint8_t pin)
     return 0;
 }
 
+void gpio_init_ADC()
+{
+    // Select Vref = AVcc
+    ADMUX |= (1 << REFS0);
+
+    // Enable ADC
+    ADCSRA |= (1 << ADEN);
+
+    // Set pre-scalar to 128
+    ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
+}
+
+int gpio_get_ADC(uint8_t pin)
+{
+    // Set analog channel
+    ADMUX |= (ADMUX & 0xF0) | (pin & 0x0F);
+
+    // Run single conversion
+    ADCSRA |= (1 << ADSC);
+
+    // Wait until conversion is finished
+    while (ADCSRA & (1 << ADSC));
+
+    // return value
+    return ADC;
+}
+
 void gpio_init_PWMT0()
 {
     // Set inverting Phase Correct PWM
