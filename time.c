@@ -34,6 +34,14 @@ bool time_extractFromGps(char* nmeaMsg)
             p++;
         }
 
+        for (uint8_t i = 0; i < 6; i++)
+        {
+            if (_N(p[i]) > 9)
+            {
+                return 0;
+            }
+        }
+
         // Convert data to integer and store in time object
         time->hh = _N(p[0]);        
         time->h  = _N(p[1]);

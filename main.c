@@ -16,16 +16,17 @@ void main(void)
     gpio_set_ISRT1();
 
     // Init Colon pin
-    gpio_setPinMode(3, OUTPUT);
-    gpio_set(3, LOW);
+    gpio_setPinMode(COLON_PIN, OUTPUT);
+    gpio_set(COLON_PIN, LOW);
 
     // Set PPS pin
-    gpio_setPinMode(2, INPUT);
+    gpio_setPinMode(PPS_PIN, INPUT);
     gpio_set_ISRINT0();
 
     // Enable Global Interrupts
     sei();
 
+    // Pre-set display content
     display_set(0, '-');
     display_set(1, '-');
     display_set(2, '-');
@@ -34,7 +35,8 @@ void main(void)
     display_set(5, '-');
 
     s = 0;
-
+    jumpstart = 0;
+    
     // Initiate second buffer
     char* buffer;
     buffer = malloc(128 * sizeof(char));
@@ -55,6 +57,7 @@ void main(void)
                 // Check if there is new time information
                 if(time_extractFromGps(buffer))
                 {
+                    jumpstart = 1;
 #ifdef __DEBUG                    
                     UART_SendLine(time_toStr());
 #endif              
@@ -71,24 +74,39 @@ void main(void)
     }
 }
 
+void clockhandler()
+{
+    gpio_set(COLON_PIN, s);
+
+    // Show the time only if there was data once before
+    if (jumpstart)
+    {
+        // Increment time, also when data was available (but not anymore)
+        if (s)
+            time_increment();
+
+        // Send data to displays
+        display_set(0, time->hh);
+        display_set(1, time->h);
+        display_set(2, time->mm);
+        display_set(3, time->m);
+        display_set(4, time->ss);
+        display_set(5, time->s);
+    }
+    else
+    {
+        // No useful data to show
+        for (uint8_t i = 0; i < 7; i++)
+            display_set(i, '-');
+    }
+
+    s = !s;
+}
+
 ISR(TIMER1_COMPA_vect)
 {
-    gpio_set(3, s);
-    s = !s;
-
-    if (s)
-        return;
-    // Executed every 0.5 seconds
-    time_increment();
-
-    display_set(0, time->hh);
-    display_set(1, time->h);
-    display_set(2, time->mm);
-    display_set(3, time->m);
-    display_set(4, time->ss);
-    display_set(5, time->s);
-
-
+    // Do clocky things! :)
+    clockhandler();
 }
 
 ISR(INT0_vect)
@@ -98,16 +116,8 @@ ISR(INT0_vect)
     TCNT1H = 0x00;
     TCNT1L = 0x00;
 
+    // Set s to 1 to indicate the start of a second
     s = 1;
-    gpio_set(3, s);
-
-    s = 0;
-    // Executed every 0.5 seconds
-
-    display_set(0, time->hh);
-    display_set(1, time->h);
-    display_set(2, time->mm);
-    display_set(3, time->m);
-    display_set(4, time->ss);
-    display_set(5, time->s);
+    clockhandler();
 }
+
