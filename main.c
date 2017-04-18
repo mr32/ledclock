@@ -36,7 +36,7 @@ void main(void)
 
     s = 0;
     jumpstart = 0;
-    
+
     // Initiate second buffer
     char* buffer;
     buffer = malloc(128 * sizeof(char));
@@ -76,11 +76,11 @@ void main(void)
 
 void clockhandler()
 {
-    gpio_set(COLON_PIN, s);
-
     // Show the time only if there was data once before
     if (jumpstart)
     {
+        gpio_set(COLON_PIN, s);
+
         // Increment time, also when data was available (but not anymore)
         if (s)
             time_increment();
