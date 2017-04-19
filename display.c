@@ -21,6 +21,11 @@ void display_set(uint8_t dispID, uint8_t content)
 
 void display_setBrightness(uint8_t brightness)
 {
+	if (brightness < MIN_BRIGHTNESS)
+		brightness = MIN_BRIGHTNESS;
+	else if (brightness > MAX_BRIGHTNESS)
+		brightness = MAX_BRIGHTNESS;
+		
     gpio_set_DCT0(255 - brightness);
 }
 

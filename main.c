@@ -23,6 +23,9 @@ void main(void)
     gpio_setPinMode(PPS_PIN, INPUT);
     gpio_set_ISRINT0();
 
+    // Enable and init ADC
+    gpio_init_ADC();
+
     // Enable Global Interrupts
     sei();
 
@@ -44,6 +47,9 @@ void main(void)
 
     while (1)
     {
+        // Adjust the brightness 
+        adjustBrightness();
+
         // Do things while there is stuff in the inputbuffer
         while (!rbuf_empty(&buf))
         {
@@ -72,6 +78,7 @@ void main(void)
             i++;
         }
     }
+
 }
 
 void clockhandler()
@@ -83,15 +90,27 @@ void clockhandler()
 
         // Increment time, also when data was available (but not anymore)
         if (s)
-            time_increment();
+        {
 
-        // Send data to displays
-        display_set(0, time->hh);
-        display_set(1, time->h);
-        display_set(2, time->mm);
-        display_set(3, time->m);
-        display_set(4, time->ss);
-        display_set(5, time->s);
+            // Send data to displays
+            display_set(0, t.hh);
+            display_set(1, t.h);
+            display_set(2, t.mm);
+            display_set(3, t.m);
+            display_set(4, t.ss);
+            display_set(5, t.s);
+        }
+        else
+        {
+            // Buffer time (it can change while executing this)
+            // Due the way time is synced, do +2
+            // +1 for data transfer
+            // +1 for buffering at a 'safe instance'
+
+            t = *time_increment(time_get());
+            t = *time_increment(&t);
+
+        }
     }
     else
     {
@@ -101,6 +120,24 @@ void clockhandler()
     }
 
     s = !s;
+}
+
+void adjustBrightness()
+{
+    char buffer[4];
+    uint8_t input = ((gpio_get_ADC(PHOTO_PIN) >> 2));
+    // Measuring gives 100 for very bright light, and 0 for no light
+    // Relation is not linear
+    // if (input < MIN_PHOTO_READOUT)
+    // {    
+    //     input = MIN_PHOTO_READOUT;
+    // }
+    if (input > 210)
+        input = 210;
+    UART_SendLine(itoa(input, buffer, 10));
+
+
+    display_setBrightness((uint8_t)input);
 }
 
 ISR(TIMER1_COMPA_vect)

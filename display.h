@@ -7,6 +7,9 @@
 #include <util/delay.h>
 #include "shiftreg.h"
 
+#define MAX_BRIGHTNESS      200
+#define MIN_BRIGHTNESS      3
+
 typedef unsigned char uint8_t;
 
 // Shift registers

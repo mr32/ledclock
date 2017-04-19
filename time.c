@@ -77,42 +77,45 @@ char* time_toStr()
     return time_str;
 }
 
-void time_increment()
+struct Time * time_increment(struct Time * time_)
 {
-    time->s += 1;
+    struct Time * t = time_;
+    t->s += 1;
 
-    if (time->s > 9)
+    if (t->s > 9)
     {
-    time->s = 0;
-    time->ss += 1;
+    t->s = 0;
+    t->ss += 1;
 
-        if (time->ss > 5)
+        if (t->ss > 5)
         {
-            time->ss = 0;
-            time->m += 1;
+            t->ss = 0;
+            t->m += 1;
 
-            if (time->m > 9)
+            if (t->m > 9)
             {
-                time->m = 0;
-                time->mm += 1;
+                t->m = 0;
+                t->mm += 1;
 
-                if (time->mm > 5)
+                if (t->mm > 5)
                 {
-                    time->mm = 0;
-                    time->h += 1;
+                    t->mm = 0;
+                    t->h += 1;
 
-                    if (time->h > 9)
+                    if (t->h > 9)
                     {
-                        time->h = 0;
-                        time->hh += 1;
+                        t->h = 0;
+                        t->hh += 1;
 
-                        if (time->hh > 2)
+                        if (t->hh > 2)
                         {
-                            time->hh = 0;
+                            t->hh = 0;
                         }
                     }
                 }
             }
         }
     }
+
+    return t;
 }

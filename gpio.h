@@ -11,7 +11,7 @@
 #define CTC_2HZ 31250
 
 typedef unsigned char uint8_t;
-
+typedef unsigned int  uint16_t;
 
 
 // Set I/O mode of GPIO pins according to the Arduino Uno pin mapping
@@ -27,7 +27,7 @@ bool gpio_get(uint8_t pin);
 void gpio_init_ADC();
 
 // Measure an analog input and return the value
-int gpio_get_ADC(uint8_t pin);
+uint16_t gpio_get_ADC(uint8_t pin);
 
 // Use PWM
 void gpio_init_PWMT0(); // Phase Correct PWM

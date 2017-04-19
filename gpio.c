@@ -348,7 +348,7 @@ void gpio_init_ADC()
     ADCSRA |= (1 << ADPS2) | (1 << ADPS1) | (1 << ADPS0);
 }
 
-int gpio_get_ADC(uint8_t pin)
+uint16_t gpio_get_ADC(uint8_t pin)
 {
     // Set analog channel
     ADMUX |= (ADMUX & 0xF0) | (pin & 0x0F);

@@ -28,10 +28,10 @@ void time_init();
 // Find time from the given NMEA message and stores it in the time obj
 bool time_extractFromGps(char* nmeaMsg);
 // Returns the time in a Time format
-struct Time* time_get();
+struct Time * time_get();
 // Returns the time as a String
 char* time_toStr();
 // Increase time with one second 
-void time_increment();
+struct Time * time_increment(struct Time * time_);
 
 #endif
