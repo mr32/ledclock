@@ -259,3 +259,8 @@ __vm
 *.sln
 *.vcxproj.*
 *.vcxproj
+
+# Ignore build files
+*.o
+*.hex
+main
