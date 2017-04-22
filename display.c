@@ -3,7 +3,7 @@
 void display_init()
 {
     shiftreg_init(&displayreg, 9, 10, 11, 12);
-    shiftreg_init(&segmentreg, 4, 5, 7, 8);
+    shiftreg_init(&segmentreg, 3, 4, 7, 8);
     gpio_init_PWMT0();
 	gpio_set_ISRT0();
 
@@ -26,7 +26,8 @@ void display_setBrightness(uint8_t brightness)
 	else if (brightness > MAX_BRIGHTNESS)
 		brightness = MAX_BRIGHTNESS;
 		
-    gpio_set_DCT0(255 - brightness);
+    gpio_set_DCT0A(255 - brightness);
+	gpio_set_DCT0B(brightness);
 }
 
 static void next()

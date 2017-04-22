@@ -43,7 +43,7 @@ void UART_Send(char* str)
 
 void UART_SendLine(char* str)
 {
-    for (uint8_t i = 0; i < strlen(str) - 1; i++)
+    for (uint8_t i = 0; i < strlen(str); i++)
     {
         // Wait until buffer is empty
         while ( !(UCSR0A & (1 << UDRE0))){};

@@ -350,9 +350,11 @@ void gpio_init_ADC()
 
 uint16_t gpio_get_ADC(uint8_t pin)
 {
+    pin &= 0x07;
+    // Reset analog channel
+    ADMUX &= 0xF8;
     // Set analog channel
-    ADMUX |= (ADMUX & 0xF0) | (pin & 0x0F);
-
+    ADMUX |= (ADMUX & 0xF8) | pin;
     // Run single conversion
     ADCSRA |= (1 << ADSC);
 
@@ -367,12 +369,13 @@ void gpio_init_PWMT0()
 {
     // Set inverting Phase Correct PWM
     TCCR0A |= (1 << COM0A1) | (1 << WGM00);
+    TCCR0A |= (1 << COM0B1);
 
     // Set pre-scaler to 64 to get a frequency of 490Hz
     TCCR0B |= (1 << CS01) | (1 << CS00);
 
     // Set that same pin to OUTPUT
-    DDRD |= (1 << PD6);
+    DDRD |= (1 << PD6) | (1 << PD5);
 }
 
 void gpio_init_CTCT1()
@@ -399,9 +402,14 @@ void gpio_init_PWMT2()
     // //DDRB |= (1 << PB3);
 }
 
-void gpio_set_DCT0(uint8_t dc)
+void gpio_set_DCT0A(uint8_t dc)
 {
     OCR0A = dc;
+}
+
+void gpio_set_DCT0B(uint8_t dc)
+{
+    OCR0B = dc;
 }
 
 void gpio_set_DCT1(int dc)

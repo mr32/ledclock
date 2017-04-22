@@ -11,8 +11,8 @@
 #include "time.h"
 #include "display.h"
 
-#define COLON_PIN           3
-#define BUTTON_PIN          13
+#define COLON_PIN           5
+#define BUTTON_PIN          5
 #define PPS_PIN             2
 #define PHOTO_PIN           0
 #define MIN_PHOTO_READOUT   3
@@ -20,7 +20,9 @@
 
 static bool s;
 static bool jumpstart;
+static bool pps_sync;
 static struct Time t;
+static bool prevBtnState;
 // Let's keep some time
 void clockhandler();
 

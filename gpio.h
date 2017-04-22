@@ -38,7 +38,8 @@ void gpio_init_CTCT1();
 
 
 // Set duty cycle
-void gpio_set_DCT0(uint8_t dc);
+void gpio_set_DCT0A(uint8_t dc);
+void gpio_set_DCT0B(uint8_t dc);
 void gpio_set_DCT1(int dc);
 void gpio_set_DCT2(uint8_t dc);
 

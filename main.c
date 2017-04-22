@@ -23,6 +23,9 @@ void main(void)
     gpio_setPinMode(PPS_PIN, INPUT);
     gpio_set_ISRINT0();
 
+    // Enable hour correct button
+    //gpio_setPinMode(BUTTON_PIN, INPUT);
+
     // Enable and init ADC
     gpio_init_ADC();
 
@@ -39,6 +42,7 @@ void main(void)
 
     s = 0;
     jumpstart = 0;
+    prevBtnState = 0;
 
     // Initiate second buffer
     char* buffer;
@@ -49,6 +53,23 @@ void main(void)
     {
         // Adjust the brightness 
         adjustBrightness();
+
+        // if (gpio_get(BUTTON_PIN))
+        //     UART_SendLine("trigger");
+
+
+
+        // if (gpio_get_ADC(BUTTON_PIN) > 512 && prevBtnState == LOW)
+        // {
+        //     prevBtnState = HIGH;
+        //     // Increase time with one hour
+        //     time_incrementHour();
+        // }
+        // else if (gpio_get_ADC(BUTTON_PIN) < 512 && prevBtnState == HIGH)
+        // {
+        //     // Reset button
+        //     prevBtnState = LOW;
+        // }
 
         // Do things while there is stuff in the inputbuffer
         while (!rbuf_empty(&buf))
@@ -86,7 +107,7 @@ void clockhandler()
     // Show the time only if there was data once before
     if (jumpstart)
     {
-        gpio_set(COLON_PIN, s);
+        gpio_setPinMode(COLON_PIN, s);
 
         // Increment time, also when data was available (but not anymore)
         if (s)
@@ -106,9 +127,16 @@ void clockhandler()
             // Due the way time is synced, do +2
             // +1 for data transfer
             // +1 for buffering at a 'safe instance'
-
-            t = *time_increment(time_get());
-            t = *time_increment(&t);
+            // Only do that when there has been at least one moment with PPS
+            if (pps_sync)
+            {
+                t = *time_increment(time_get());
+                t = *time_increment(&t);
+            }
+            else
+            {
+                t= *time_get();
+            }
 
         }
     }
@@ -128,13 +156,12 @@ void adjustBrightness()
     uint8_t input = ((gpio_get_ADC(PHOTO_PIN) >> 2));
     // Measuring gives 100 for very bright light, and 0 for no light
     // Relation is not linear
-    // if (input < MIN_PHOTO_READOUT)
-    // {    
-    //     input = MIN_PHOTO_READOUT;
-    // }
     if (input > 210)
         input = 210;
-    UART_SendLine(itoa(input, buffer, 10));
+    if (input < 30)
+        input = 30;
+
+    //UART_SendLine(itoa(input, buffer, 10));
 
 
     display_setBrightness((uint8_t)input);
@@ -155,6 +182,7 @@ ISR(INT0_vect)
 
     // Set s to 1 to indicate the start of a second
     s = 1;
+    pps_sync = 1;
     clockhandler();
 }
 
