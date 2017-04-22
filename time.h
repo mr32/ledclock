@@ -22,6 +22,7 @@ struct Time {
 
 struct Time* time;
 char* time_str;
+uint8_t hourOffset;
 
 // Initiate time by reserving the required memory
 void time_init();
@@ -33,5 +34,7 @@ struct Time * time_get();
 char* time_toStr();
 // Increase time with one second 
 struct Time * time_increment(struct Time * time_);
-
+// Add Hours to the time
+void time_incrementHour();
+static void time_writeOffset();
 #endif

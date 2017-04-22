@@ -9,6 +9,8 @@ void time_init()
     // Set memory content to nothing
     memset(time, 0, sizeof(struct Time));
     memset(time_str, 0, 6 * sizeof(char));
+
+    hourOffset = 0;
 }
 
 bool time_extractFromGps(char* nmeaMsg)
@@ -42,6 +44,7 @@ bool time_extractFromGps(char* nmeaMsg)
             }
         }
 
+
         // Convert data to integer and store in time object
         time->hh = _N(p[0]);        
         time->h  = _N(p[1]);
@@ -50,7 +53,8 @@ bool time_extractFromGps(char* nmeaMsg)
         time->ss = _N(p[4]);
         time->s  = _N(p[5]);
 
-    
+        time_writeOffset();
+
 
         return 1;
     }
@@ -106,16 +110,44 @@ struct Time * time_increment(struct Time * time_)
                     {
                         t->h = 0;
                         t->hh += 1;
-
-                        if (t->hh > 2)
-                        {
-                            t->hh = 0;
-                        }
                     }
+
+                    if (time->hh == 2 && time->h > 3)
+                    {
+                        time->hh = 0;
+                        time->h = 0;
+                    }
+                    
                 }
             }
         }
     }
 
     return t;
+}
+
+void time_incrementHour()
+{
+    hourOffset = (hourOffset + 1) % 24;
+}
+
+static void time_writeOffset()
+{
+    for (uint8_t i = 0; i < hourOffset; i++)
+    {
+        time->h += 1;
+
+        if (time->h > 9)
+        {
+            time->h = 0;
+            time->hh += 1;
+        }
+        if (time->hh == 2 && time->h > 3)
+        {
+            time->hh = 0;
+            time->h = 0;
+        }
+    
+    }
+
 }
