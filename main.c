@@ -52,24 +52,25 @@ void main(void)
     while (1)
     {
         // Adjust the brightness 
-        adjustBrightness();
+        //adjustBrightness();
+        display_setBrightness(200);
 
         // if (gpio_get(BUTTON_PIN))
         //     UART_SendLine("trigger");
 
 
 
-        // if (gpio_get_ADC(BUTTON_PIN) > 512 && prevBtnState == LOW)
-        // {
-        //     prevBtnState = HIGH;
-        //     // Increase time with one hour
-        //     time_incrementHour();
-        // }
-        // else if (gpio_get_ADC(BUTTON_PIN) < 512 && prevBtnState == HIGH)
-        // {
-        //     // Reset button
-        //     prevBtnState = LOW;
-        // }
+        if (gpio_get_ADC(BUTTON_PIN) > 512 && prevBtnState == LOW)
+        {
+            prevBtnState = HIGH;
+            // Increase time with one hour
+            time_incrementHour();
+        }
+        else if (gpio_get_ADC(BUTTON_PIN) < 512 && prevBtnState == HIGH)
+        {
+            // Reset button
+            prevBtnState = LOW;
+        }
 
         // Do things while there is stuff in the inputbuffer
         while (!rbuf_empty(&buf))
