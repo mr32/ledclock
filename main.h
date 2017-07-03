@@ -1,4 +1,4 @@
-#define __DEBUG
+// #define __DEBUG
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -23,6 +23,7 @@ static bool jumpstart;
 static bool pps_sync;
 static struct Time t;
 static bool prevBtnState;
+
 // Let's keep some time
 void clockhandler();
 

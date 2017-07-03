@@ -23,10 +23,7 @@ void main(void)
     gpio_setPinMode(PPS_PIN, INPUT);
     gpio_set_ISRINT0();
 
-    // Enable hour correct button
-    //gpio_setPinMode(BUTTON_PIN, INPUT);
-
-    // Enable and init ADC
+    // Enable and init ADC for button input
     gpio_init_ADC();
 
     // Enable Global Interrupts
@@ -55,11 +52,7 @@ void main(void)
         //adjustBrightness();
         display_setBrightness(200);
 
-        // if (gpio_get(BUTTON_PIN))
-        //     UART_SendLine("trigger");
-
-
-
+        // Set-Hour button debouncing
         if (gpio_get_ADC(BUTTON_PIN) > 512 && prevBtnState == LOW)
         {
             prevBtnState = HIGH;
@@ -136,7 +129,7 @@ void clockhandler()
             }
             else
             {
-                t= *time_get();
+                t = *time_get();
             }
 
         }
@@ -177,13 +170,12 @@ ISR(TIMER1_COMPA_vect)
 ISR(INT0_vect)
 {
     // Executed on PPS HIGH
-    // Reset TIMER1 Counter to sync with the PPS pulse
-    TCNT1H = 0x00;
-    TCNT1L = 0x00;
+    // Force trigger the timer CTC function by setting the 
+    // time buffer to a near-overflow value
+    TCNT1H = (unsigned char)(CTC_2HZ >> 8);
+    TCNT1L = (unsigned char)(CTC_2HZ - 1);
 
     // Set s to 1 to indicate the start of a second
     s = 1;
     pps_sync = 1;
-    clockhandler();
 }
-
