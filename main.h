@@ -22,6 +22,7 @@ static bool s;
 static bool jumpstart;
 static bool pps_sync;
 static struct Time t;
+static struct Time t_prev;
 static bool prevBtnState;
 
 // Let's keep some time

@@ -117,6 +117,9 @@ void clockhandler()
         }
         else
         {
+            // Store previous time value as a reference
+            t_prev = t;
+
             // Buffer time (it can change while executing this)
             // Due the way time is synced, do +2
             // +1 for data transfer
@@ -131,6 +134,13 @@ void clockhandler()
             {
                 t = *time_get();
             }
+
+            // If the time stalls (delayed GPS message), increase time by one second
+            if (t.s == t_prev.s)
+            {
+                t = *time_increment(&t);
+            }
+
 
         }
     }
