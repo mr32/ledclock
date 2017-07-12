@@ -179,11 +179,17 @@ ISR(TIMER1_COMPA_vect)
 
 ISR(INT0_vect)
 {
-    // Executed on PPS HIGH
-    // Force trigger the timer CTC function by setting the 
-    // time buffer to a near-overflow value
-    TCNT1H = (unsigned char)(CTC_2HZ >> 8);
-    TCNT1L = (unsigned char)(CTC_2HZ - 1);
+    // Avoid early triggering. Allow only when no sync has yet been established
+    // or when the colons are turned off (meaning that the display update cycle will
+    // be executed on the next call of 'clockhandler()')
+    if (!pps_sync || !s)
+    {
+        // Executed on PPS HIGH
+        // Force trigger the timer CTC function by setting the 
+        // time buffer to a near-overflow value
+        TCNT1H = (unsigned char)(CTC_2HZ >> 8);
+        TCNT1L = (unsigned char)(CTC_2HZ - 1);
+    }    
 
     // Set s to 1 to indicate the start of a second
     s = 1;
